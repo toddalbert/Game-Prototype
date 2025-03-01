@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    [SerializeField] private int lives = 3; // in meters per second
+
     [SerializeField] private float speed = 5f; // in meters per second
 
     [SerializeField] private GameObject projectilePrefab;
@@ -17,12 +19,16 @@ public class Player : MonoBehaviour
     void Start()
     {
         transform.position = new Vector3(0, 0, 0);
+        lives = 3;
     }
 
     void Update()
     {
         CalculateMovement();
-        FireProjectile();
+        if (Input.GetKeyDown(KeyCode.Space) && Time.time > nextFireTime)
+        {
+            FireProjectile();
+        }
     }
 
     void CalculateMovement()
@@ -48,10 +54,17 @@ public class Player : MonoBehaviour
 
     void FireProjectile()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && Time.time > nextFireTime)
+        nextFireTime = Time.time + fireRate;
+        Instantiate(projectilePrefab, transform.position + new Vector3(0, projectileOffset, 0), projectilePrefab.transform.rotation);
+    }
+
+    public void TakeDamage()
+    {
+        lives--;
+        Debug.Log("Lives: " + lives);
+        if (lives <= 0)
         {
-            nextFireTime = Time.time + fireRate;
-            Instantiate(projectilePrefab, transform.position + new Vector3(0, projectileOffset, 0), projectilePrefab.transform.rotation);
+            Destroy(this.gameObject);
         }
     }
 }
