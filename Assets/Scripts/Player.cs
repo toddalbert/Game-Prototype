@@ -13,6 +13,8 @@ public class Player : MonoBehaviour
 
     private float projectileOffset = 0.8f;
 
+    private SpawnManager spawnManager;
+
     private float horizontalInput;
     private float verticalInput;
 
@@ -20,6 +22,11 @@ public class Player : MonoBehaviour
     {
         transform.position = new Vector3(0, 0, 0);
         lives = 3;
+        spawnManager = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
+        if (spawnManager == null)
+        {
+            Debug.LogError("The SpawnManager is null");
+        }
     }
 
     void Update()
@@ -64,6 +71,7 @@ public class Player : MonoBehaviour
         Debug.Log("Lives: " + lives);
         if (lives <= 0)
         {
+            spawnManager.OnPlayerDeath();
             Destroy(this.gameObject);
         }
     }
