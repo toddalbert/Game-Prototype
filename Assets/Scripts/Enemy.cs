@@ -2,18 +2,19 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    public float speed = 4.0f;
-    private float bottomBound = -4f;
+    [SerializeField] private float _speed = 4.0f;
+    [SerializeField] private float _bottomBound = -4.8f;
+    [SerializeField] private float _topBound = 8.0f;
 
     // Update is called once per frame
     void Update()
     {
-        transform.Translate(Vector3.down * Time.deltaTime * speed);
+        transform.Translate(Vector3.down * (Time.deltaTime * _speed));
 
-        if (transform.position.y < bottomBound)
+        if (transform.position.y < _bottomBound)
         {
             float randomX = Random.Range(-10.5f, 10.5f);
-            transform.position = new Vector3(randomX, 6, 0);
+            transform.position = new Vector3(randomX, _topBound, 0);
         }
         
     }
@@ -26,11 +27,12 @@ public class Enemy : MonoBehaviour
             if (player != null) 
             {
                 player.TakeDamage();
+                Destroy(this.gameObject);
             }
         } else if (other.CompareTag("Projectile"))
         {
             Destroy(other.gameObject);
+            Destroy(this.gameObject);
         }
-        Destroy(this.gameObject);
     }
 }

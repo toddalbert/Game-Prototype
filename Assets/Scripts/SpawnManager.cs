@@ -6,7 +6,7 @@ public class SpawnManager : MonoBehaviour
     [SerializeField] private GameObject enemyContainer;
 
     private float spawnRangeX = 10;
-    private float spawnPosY = 5;
+    private float spawnPosY = 7.8f;
 
     private bool stopSpawning = false;
 
@@ -15,7 +15,7 @@ public class SpawnManager : MonoBehaviour
 
     void Start()
     {
-        InvokeRepeating("SpawnRandomEnemy", startDelay, spawnInterval);
+        InvokeRepeating("SpawnRandomEnemy", startDelay, spawnInterval); // coroutine would allow us to stop proccess
     }
 
     void SpawnRandomEnemy()
