@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class Player : MonoBehaviour
 {
@@ -7,9 +8,11 @@ public class Player : MonoBehaviour
     [SerializeField] private float speed = 5f; // in meters per second
 
     [SerializeField] private GameObject projectilePrefab;
+    [SerializeField] private GameObject tripleShotPrefab;
 
     [SerializeField] private float fireRate = 0.25f;
     [SerializeField] private float nextFireTime = 0f;
+    [SerializeField] private float tripleShotPowerDown = 5f;
 
     [SerializeField] private Vector3 _projectileOffset = new Vector3(0, 0.85f, 0);
 
@@ -19,6 +22,8 @@ public class Player : MonoBehaviour
     private float verticalInput;
     private Vector3 direction;
     private Vector3 _newPosition;
+
+    private bool _isTripleShotActive = false;
 
     void Start()
     {
@@ -66,7 +71,11 @@ public class Player : MonoBehaviour
     void FireProjectile()
     {
         nextFireTime = Time.time + fireRate;
-        Instantiate(projectilePrefab, transform.position + _projectileOffset, projectilePrefab.transform.rotation);
+        if (_isTripleShotActive){
+            Instantiate(tripleShotPrefab, transform.position, projectilePrefab.transform.rotation);
+        } else {
+            Instantiate(projectilePrefab, transform.position + _projectileOffset, projectilePrefab.transform.rotation);
+        }
     }
 
     public void TakeDamage()
@@ -78,5 +87,17 @@ public class Player : MonoBehaviour
             spawnManager.OnPlayerDeath();
             Destroy(this.gameObject);
         }
+    }
+
+    public void TripleShotActive()
+    {
+        _isTripleShotActive = true;
+        StartCoroutine(TripleShotPowerDown());
+    }
+
+    IEnumerator TripleShotPowerDown()
+    {
+        yield return new WaitForSeconds(tripleShotPowerDown);
+        _isTripleShotActive = false;
     }
 }
