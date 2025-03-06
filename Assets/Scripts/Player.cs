@@ -86,6 +86,7 @@ public class Player : MonoBehaviour
 
     public void TakeDamage()
     {
+        if (_isShieldActive) return;
         lives--;
         Debug.Log("Lives: " + lives);
         if (lives <= 0)
