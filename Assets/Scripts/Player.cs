@@ -6,6 +6,7 @@ public class Player : MonoBehaviour
     [SerializeField] private int lives = 3;
 
     [SerializeField] private float speed = 5f; // in meters per second
+    [SerializeField] private float speedMultiplier = 2f;
 
     [SerializeField] private GameObject projectilePrefab;
     [SerializeField] private GameObject tripleShotPrefab;
@@ -13,6 +14,8 @@ public class Player : MonoBehaviour
     [SerializeField] private float fireRate = 0.25f;
     [SerializeField] private float nextFireTime = 0f;
     [SerializeField] private float tripleShotPowerDown = 5f;
+    [SerializeField] private float speedPowerDown = 5f;
+    [SerializeField] private float shieldPowerDown = 5f;
 
     [SerializeField] private Vector3 _projectileOffset = new Vector3(0, 0.85f, 0);
 
@@ -24,6 +27,7 @@ public class Player : MonoBehaviour
     private Vector3 _newPosition;
 
     private bool _isTripleShotActive = false;
+    private bool _isShieldActive = false;
 
     void Start()
     {
@@ -51,7 +55,9 @@ public class Player : MonoBehaviour
         verticalInput = Input.GetAxis("Vertical");
 
         direction = new Vector3(horizontalInput, verticalInput, 0);
-        transform.Translate(direction * Time.deltaTime * speed);
+
+        transform.Translate(direction * (Time.deltaTime * speed));
+        
         _newPosition = transform.position;
         _newPosition.y = Mathf.Clamp(transform.position.y, -4f, 0f);
 
@@ -93,6 +99,30 @@ public class Player : MonoBehaviour
     {
         _isTripleShotActive = true;
         StartCoroutine(TripleShotPowerDown());
+    }
+
+    public void SpeedActive()
+    {
+        speed *= speedMultiplier;
+        StartCoroutine(SpeedPowerDown());
+    }
+
+    public void ShieldActive()
+    {
+        _isShieldActive = true;
+        StartCoroutine(ShieldPowerDown());
+    }
+
+    IEnumerator SpeedPowerDown()
+    {
+        yield return new WaitForSeconds(speedPowerDown);
+        speed /= speedMultiplier;
+    }
+
+    IEnumerator ShieldPowerDown()
+    {
+        yield return new WaitForSeconds(shieldPowerDown);
+        _isShieldActive = false;
     }
 
     IEnumerator TripleShotPowerDown()

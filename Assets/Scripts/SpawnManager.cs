@@ -5,7 +5,7 @@ public class SpawnManager : MonoBehaviour
 {
     [SerializeField] private GameObject[] _enemyPrefabs;
     [SerializeField] private GameObject _enemyContainer;
-    [SerializeField] private GameObject _powerUpPrefab;
+    [SerializeField] private GameObject[] _powerUpPrefabs;
 
     private float _spawnRangeX = 10;
     private float _spawnPosY = 7.8f;
@@ -14,7 +14,6 @@ public class SpawnManager : MonoBehaviour
 
     void Start()
     {
-        // InvokeRepeating("SpawnRandomEnemy", _startDelay, _spawnInterval); // coroutine would allow us to stop proccess
         StartCoroutine(SpawnRandomEnemy());
         StartCoroutine(SpawnPowerUp());
     }
@@ -22,7 +21,7 @@ public class SpawnManager : MonoBehaviour
     IEnumerator SpawnRandomEnemy()
     {
         while (!_stopSpawning)
-        {       
+        {
             int index = Random.Range(0,_enemyPrefabs.Length);
             Vector3 spawnPos = new Vector3(Random.Range(-_spawnRangeX, _spawnRangeX), _spawnPosY, 0);
             GameObject newEnemy = Instantiate(_enemyPrefabs[index], spawnPos, _enemyPrefabs[index].transform.rotation);
@@ -35,10 +34,10 @@ public class SpawnManager : MonoBehaviour
     {
         while (!_stopSpawning)
         {
-            // every 3-7 seconds spawn in powerup
+            int index = Random.Range(0,_powerUpPrefabs.Length);
             Vector3 spawnPos = new Vector3(Random.Range(-_spawnRangeX, _spawnRangeX), _spawnPosY, 0);
-            Instantiate(_powerUpPrefab, spawnPos, _powerUpPrefab.transform.rotation);
-            yield return new WaitForSeconds(Random.Range(3, 8));
+            Instantiate(_powerUpPrefabs[index], spawnPos, _powerUpPrefabs[index].transform.rotation);
+            yield return new WaitForSeconds(Random.Range(5, 11));
         }
     }
 

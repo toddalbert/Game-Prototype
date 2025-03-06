@@ -3,12 +3,10 @@ using UnityEngine;
 public class PowerUp : MonoBehaviour
 {
 
-    private float _speed = 3f;
-    
-    void Start()
-    {
-        
-    }
+    [SerializeField] private float _speed = 3f;
+    // ID for powerups
+    [SerializeField] private int powerupId = 0;
+    // 0 = triple shot, 1 = speed, 2 = shield
 
     void Update()
     {
@@ -26,7 +24,21 @@ public class PowerUp : MonoBehaviour
             Player player = other.GetComponent<Player>();
             if (player != null) 
             {
-                player.TripleShotActive();
+                switch (powerupId)
+                {
+                    case 0:
+                        player.TripleShotActive();
+                        break;
+                    case 1:
+                        player.SpeedActive();
+                        break;
+                    case 2:
+                        player.ShieldActive();
+                        break;
+                    default:
+                        Debug.LogError("Invalid powerup ID");
+                        break;
+                }
             }
             Destroy(this.gameObject);
         }
