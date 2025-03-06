@@ -10,6 +10,7 @@ public class Player : MonoBehaviour
 
     [SerializeField] private GameObject projectilePrefab;
     [SerializeField] private GameObject tripleShotPrefab;
+    [SerializeField] private GameObject shieldObject;
 
     [SerializeField] private float fireRate = 0.25f;
     [SerializeField] private float nextFireTime = 0f;
@@ -111,6 +112,7 @@ public class Player : MonoBehaviour
     public void ShieldActive()
     {
         _isShieldActive = true;
+        shieldObject.SetActive(true);
         StartCoroutine(ShieldPowerDown());
     }
 
@@ -124,6 +126,7 @@ public class Player : MonoBehaviour
     {
         yield return new WaitForSeconds(shieldPowerDown);
         _isShieldActive = false;
+        shieldObject.SetActive(false);
     }
 
     IEnumerator TripleShotPowerDown()
