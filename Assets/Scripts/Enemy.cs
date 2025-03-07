@@ -9,7 +9,8 @@ public class Enemy : MonoBehaviour
 
     private Player _player;
     private Animator _animator;
-    // private Collider2D _collider;
+    private Collider2D _collider;
+    private bool _isDestroyed = false;
 
     void Start()
     {
@@ -19,8 +20,8 @@ public class Enemy : MonoBehaviour
         _animator = GetComponent<Animator>();
         if (_animator == null) Debug.LogError("The Animator is null");
 
-        // _collider = GetComponent<Collider2D>();
-        // if (_collider == null) Debug.LogError("The Collider is null");
+        _collider = GetComponent<Collider2D>();
+        if (_collider == null) Debug.LogError("The Collider is null");
     }
 
     // Update is called once per frame
@@ -28,7 +29,7 @@ public class Enemy : MonoBehaviour
     {
         transform.Translate(Vector3.down * (Time.deltaTime * _speed));
 
-        if (transform.position.y < _bottomBound)
+        if (transform.position.y < _bottomBound && !_isDestroyed)
         {
             float randomX = Random.Range(-10.5f, 10.5f);
             transform.position = new Vector3(randomX, _topBound, 0);
@@ -39,8 +40,9 @@ public class Enemy : MonoBehaviour
     private void OnDestroy()
     {
         _animator.SetTrigger("OnEnemyDeath");
-        _speed = 0;
-        // _collider.enabled = false;
+        _isDestroyed = true;
+        // _speed = 0;
+        _collider.enabled = false;
         Destroy(this.gameObject, 2.6f); // wait 2 seconds
     }
 
