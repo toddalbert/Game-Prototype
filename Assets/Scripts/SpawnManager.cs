@@ -20,6 +20,9 @@ public class SpawnManager : MonoBehaviour
 
     IEnumerator SpawnRandomEnemy()
     {
+
+        yield return new WaitForSeconds(0.5f);
+
         while (!_stopSpawning)
         {
             int index = Random.Range(0,_enemyPrefabs.Length);
@@ -32,6 +35,9 @@ public class SpawnManager : MonoBehaviour
 
     IEnumerator SpawnPowerUp()
     {
+
+        yield return new WaitForSeconds(2.5f);
+
         while (!_stopSpawning)
         {
             int index = Random.Range(0,_powerUpPrefabs.Length);

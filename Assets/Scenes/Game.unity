@@ -1599,24 +1599,6 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 3.0792832, y: 3.8268728}
   m_EdgeRadius: 0
---- !u!1 &1828102011 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4879729449082166731, guid: 67abdca6c9d23454dbd96c44ee7ba8ea, type: 3}
-  m_PrefabInstance: {fileID: 9079369874644441681}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1828102014
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1828102011}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6b766f10cf352411abf0ceaaf3dbb13c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _speed: 4
 --- !u!1001 &8779987303533412581
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1726,6 +1708,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 615820766891084078, guid: 67abdca6c9d23454dbd96c44ee7ba8ea, type: 3}
+      propertyPath: _speed
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 615820766891084078, guid: 67abdca6c9d23454dbd96c44ee7ba8ea, type: 3}
+      propertyPath: _explosionPrefab
+      value: 
+      objectReference: {fileID: 764777120703194816, guid: 1b8f1f3b6186d4c31a382dc3b262e5cb, type: 3}
     - target: {fileID: 4879729449082166731, guid: 67abdca6c9d23454dbd96c44ee7ba8ea, type: 3}
       propertyPath: m_Name
       value: Asteroid
@@ -1733,10 +1723,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 4879729449082166731, guid: 67abdca6c9d23454dbd96c44ee7ba8ea, type: 3}
-      insertIndex: 2
-      addedObject: {fileID: 1828102014}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 67abdca6c9d23454dbd96c44ee7ba8ea, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
