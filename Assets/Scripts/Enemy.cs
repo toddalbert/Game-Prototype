@@ -8,14 +8,19 @@ public class Enemy : MonoBehaviour
     [SerializeField] private int _points = 10;
 
     private Player _player;
+    private Animator _animator;
+    // private Collider2D _collider;
 
     void Start()
     {
         _player = GameObject.Find("Player").GetComponent<Player>();
-        if (_player == null)
-        {
-            Debug.LogError("The Player is null");
-        }
+        if (_player == null) Debug.LogError("The Player is null");
+
+        _animator = GetComponent<Animator>();
+        if (_animator == null) Debug.LogError("The Animator is null");
+
+        // _collider = GetComponent<Collider2D>();
+        // if (_collider == null) Debug.LogError("The Collider is null");
     }
 
     // Update is called once per frame
@@ -31,6 +36,14 @@ public class Enemy : MonoBehaviour
         
     }
 
+    private void OnDestroy()
+    {
+        _animator.SetTrigger("OnEnemyDeath");
+        _speed = 0;
+        // _collider.enabled = false;
+        Destroy(this.gameObject, 2.6f); // wait 2 seconds
+    }
+
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player"))
@@ -39,7 +52,7 @@ public class Enemy : MonoBehaviour
             if (player != null) 
             {
                 player.TakeDamage();
-                Destroy(this.gameObject);
+                OnDestroy();
             }
         } else if (other.CompareTag("Projectile"))
         {
@@ -47,8 +60,8 @@ public class Enemy : MonoBehaviour
             {
                 _player.UpdateScore(_points);
             }
+            OnDestroy();
             Destroy(other.gameObject);
-            Destroy(this.gameObject);
         }
     }
 }
