@@ -41,8 +41,8 @@ public class Asteroid : MonoBehaviour
         {
             Destroy(other.gameObject);
             GameObject explosion = Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
-            Destroy(this.gameObject, 0.3f); // wait 2 seconds
-            Destroy(explosion, 2.6f); // wait 2 seconds
+            Destroy(explosion, 2.6f);
+            Destroy(this.gameObject, 0.3f);
         }
     }
 }

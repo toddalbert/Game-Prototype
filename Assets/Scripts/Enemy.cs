@@ -10,6 +10,7 @@ public class Enemy : MonoBehaviour
     private Player _player;
     private Animator _animator;
     private Collider2D _collider;
+    private AudioSource _audioSource;
     private bool _isDestroyed = false;
 
     void Start()
@@ -22,6 +23,9 @@ public class Enemy : MonoBehaviour
 
         _collider = GetComponent<Collider2D>();
         if (_collider == null) Debug.LogError("The Collider is null");
+
+        _audioSource = GetComponent<AudioSource>();
+        if (_audioSource == null) Debug.LogError("The AudioSource is null");
     }
 
     // Update is called once per frame
@@ -41,9 +45,10 @@ public class Enemy : MonoBehaviour
     {
         _animator.SetTrigger("OnEnemyDeath");
         _isDestroyed = true;
+        _audioSource.Play();
         // _speed = 0;
         _collider.enabled = false;
-        Destroy(this.gameObject, 2.6f); // wait 2 seconds
+        Destroy(this.gameObject, 3.1f);
     }
 
     private void OnTriggerEnter2D(Collider2D other)

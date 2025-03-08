@@ -8,6 +8,9 @@ public class Player : MonoBehaviour
     [SerializeField] private GameObject _tripleShotPrefab;
     [SerializeField] private GameObject _projectilePrefab;
     [SerializeField] private Vector3 _projectileOffset = new Vector3(0, 0.85f, 0);
+    [SerializeField] private AudioClip _laserSoundClip;
+    [SerializeField] private AudioClip _powerUpSoundClip;
+    [SerializeField] private AudioClip _explosionSoundClip;
 
     [SerializeField] private int _lives = 3;
     [SerializeField] private float _speed = 5f; // in meters per second
@@ -29,6 +32,7 @@ public class Player : MonoBehaviour
     private bool _isShieldActive = false;
     private int _score = 0;
 
+    private AudioSource _audioSource;
     private UIManager _uiManager;
 
     void Start()
@@ -38,6 +42,12 @@ public class Player : MonoBehaviour
         if (_uiManager == null)
         {
             Debug.LogError("The UIManager is null");
+        }
+        
+        _audioSource = GetComponent<AudioSource>();
+        if (_audioSource == null)
+        {
+            Debug.LogError("The AudioSource is null");
         }
         
         UpdateScore(0);
@@ -95,6 +105,8 @@ public class Player : MonoBehaviour
         } else {
             Instantiate(_projectilePrefab, transform.position + _projectileOffset, _projectilePrefab.transform.rotation);
         }
+        _audioSource.clip = _laserSoundClip;
+        _audioSource.Play();
     }
 
     public void UpdateScore(int points) {
@@ -119,7 +131,9 @@ public class Player : MonoBehaviour
             case 0:
             default:
                 _spawnManager.OnPlayerDeath();
-                Destroy(this.gameObject);
+                _audioSource.clip = _explosionSoundClip;
+                _audioSource.Play();
+                Destroy(this.gameObject, 3.0f);
                 break;
         }
     }
@@ -127,12 +141,16 @@ public class Player : MonoBehaviour
     public void TripleShotActive()
     {
         _isTripleShotActive = true;
+        _audioSource.clip = _powerUpSoundClip;
+        _audioSource.Play();
         StartCoroutine(TripleShotPowerDown());
     }
 
     public void SpeedActive()
     {
         _speed *= _speedMultiplier;
+        _audioSource.clip = _powerUpSoundClip;
+        _audioSource.Play();
         StartCoroutine(SpeedPowerDown());
     }
 
@@ -140,6 +158,8 @@ public class Player : MonoBehaviour
     {
         _isShieldActive = true;
         _shieldObject.SetActive(true);
+        _audioSource.clip = _powerUpSoundClip;
+        _audioSource.Play();
         StartCoroutine(ShieldPowerDown());
     }
 
