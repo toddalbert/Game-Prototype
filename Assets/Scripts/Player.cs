@@ -3,22 +3,20 @@ using System.Collections;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField] private int _lives = 3;
+    [SerializeField] private GameObject _shieldObject;
+    [SerializeField] private GameObject[] _explosionPrefabs;
+    [SerializeField] private GameObject _tripleShotPrefab;
+    [SerializeField] private GameObject _projectilePrefab;
+    [SerializeField] private Vector3 _projectileOffset = new Vector3(0, 0.85f, 0);
 
+    [SerializeField] private int _lives = 3;
     [SerializeField] private float _speed = 5f; // in meters per second
     [SerializeField] private float _speedMultiplier = 2f;
-
-    [SerializeField] private GameObject _projectilePrefab;
-    [SerializeField] private GameObject _tripleShotPrefab;
-    [SerializeField] private GameObject _shieldObject;
-
     [SerializeField] private float _fireRate = 0.25f;
     [SerializeField] private float _nextFireTime = 0f;
     [SerializeField] private float _tripleShotPowerDown = 5f;
     [SerializeField] private float _speedPowerDown = 5f;
     [SerializeField] private float _shieldPowerDown = 5f;
-
-    [SerializeField] private Vector3 _projectileOffset = new Vector3(0, 0.85f, 0);
 
     private SpawnManager _spawnManager;
 
@@ -110,10 +108,19 @@ public class Player : MonoBehaviour
         _lives--;
         Debug.Log("Lives: " + _lives);
         _uiManager.UpdateLives(_lives);
-        if (_lives <= 0)
+        switch (_lives)
         {
-            _spawnManager.OnPlayerDeath();
-            Destroy(this.gameObject);
+            case 2:
+                _explosionPrefabs[0].SetActive(true);
+                break;
+            case 1:
+                _explosionPrefabs[1].SetActive(true);
+                break;
+            case 0:
+            default:
+                _spawnManager.OnPlayerDeath();
+                Destroy(this.gameObject);
+                break;
         }
     }
 
