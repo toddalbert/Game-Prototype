@@ -67,6 +67,7 @@ public class Enemy : MonoBehaviour
             {
                 _player.UpdateScore(_points);
             }
+            Destroy(GetComponent<Collider2D>());
             OnDestroy();
             Destroy(other.gameObject);
         }
