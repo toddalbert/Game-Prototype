@@ -6,12 +6,16 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float _bottomBound = -4.8f;
     [SerializeField] private float _topBound = 8.0f;
     [SerializeField] private int _points = 10;
+    [SerializeField] private GameObject _projectilePrefab;
+    [SerializeField] private AudioClip _laserSoundClip;
 
     private Player _player;
     private Animator _animator;
     private Collider2D _collider;
     private AudioSource _audioSource;
     private bool _isDestroyed = false;
+    private float _fireRate = 3.0f;
+    private float _canFire = -1f;
 
     void Start()
     {
@@ -26,10 +30,31 @@ public class Enemy : MonoBehaviour
 
         _audioSource = GetComponent<AudioSource>();
         if (_audioSource == null) Debug.LogError("The AudioSource is null");
+
+        _canFire = -1f;
     }
 
     // Update is called once per frame
     void Update()
+    {
+        CalculateMovement();
+
+        if (Time.time > _canFire)
+        {
+            _fireRate = Random.Range(3f, 7f);
+            _canFire = Time.time + _fireRate;
+            GameObject enemyLaser = Instantiate(_projectilePrefab, transform.position, Quaternion.identity);
+            Laser[] lasers = enemyLaser.GetComponentsInChildren<Laser>();
+            foreach (Laser laser in lasers)
+            {
+                laser.SetIsEnemyLaser();
+            }
+            // _audioSource.clip = _laserSoundClip;
+            // _audioSource.Play();
+        }
+    }
+
+    private void CalculateMovement()
     {
         transform.Translate(Vector3.down * (Time.deltaTime * _speed));
 
@@ -38,7 +63,6 @@ public class Enemy : MonoBehaviour
             float randomX = Random.Range(-10.5f, 10.5f);
             transform.position = new Vector3(randomX, _topBound, 0);
         }
-        
     }
 
     private void OnDestroy()
@@ -72,4 +96,5 @@ public class Enemy : MonoBehaviour
             Destroy(other.gameObject);
         }
     }
+
 }

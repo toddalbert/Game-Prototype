@@ -53,6 +53,9 @@ MonoBehaviour:
   _bottomBound: -4.8
   _topBound: 8
   _points: 10
+  _projectilePrefab: {fileID: 721304625510241001, guid: aa8c92dd42a084c3487f25e606b37702, type: 3}
+  _projectileOffset: {x: 0, y: -0.5, z: 0}
+  _laserSoundClip: {fileID: 8300000, guid: 75676f361bdfeaf41a46623e95df3dbc, type: 3}
 --- !u!212 &853883312779984885
 SpriteRenderer:
   m_ObjectHideFlags: 0
