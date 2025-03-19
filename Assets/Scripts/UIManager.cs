@@ -17,8 +17,6 @@ public class UIManager : MonoBehaviour
     {
         _gameOverText.gameObject.SetActive(false);
         _restartText.gameObject.SetActive(false);
-        UpdateScoreText(0);
-        UpdateLives(3);
         _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         if (_gameManager == null)
         {
@@ -31,8 +29,9 @@ public class UIManager : MonoBehaviour
     }
 
     public void UpdateLives(int lives) {
+        if (lives < 0 || lives > _livesSprites.Length) return;
         _livesImage.sprite = _livesSprites[lives];
-        if (lives <= 0) {
+        if (lives == 0) {
             GameOverSequence();
         }
     }

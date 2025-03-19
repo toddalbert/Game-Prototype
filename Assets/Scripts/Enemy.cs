@@ -38,20 +38,21 @@ public class Enemy : MonoBehaviour
     void Update()
     {
         CalculateMovement();
+        if (Time.time > _canFire) FireLaser();
+    }
 
-        if (Time.time > _canFire)
+    private void FireLaser()
+    {
+        _fireRate = Random.Range(3f, 7f);
+        _canFire = Time.time + _fireRate;
+        GameObject enemyLaser = Instantiate(_projectilePrefab, transform.position, Quaternion.identity);
+        Laser[] lasers = enemyLaser.GetComponentsInChildren<Laser>();
+        foreach (Laser laser in lasers)
         {
-            _fireRate = Random.Range(3f, 7f);
-            _canFire = Time.time + _fireRate;
-            GameObject enemyLaser = Instantiate(_projectilePrefab, transform.position, Quaternion.identity);
-            Laser[] lasers = enemyLaser.GetComponentsInChildren<Laser>();
-            foreach (Laser laser in lasers)
-            {
-                laser.SetIsEnemyLaser();
-            }
-            // _audioSource.clip = _laserSoundClip;
-            // _audioSource.Play();
+            laser.SetIsEnemyLaser();
         }
+        // _audioSource.clip = _laserSoundClip;
+        // _audioSource.Play();
     }
 
     private void CalculateMovement()
@@ -91,7 +92,6 @@ public class Enemy : MonoBehaviour
             {
                 _player.UpdateScore(_points);
             }
-            Destroy(GetComponent<Collider2D>());
             OnDestroy();
             Destroy(other.gameObject);
         }

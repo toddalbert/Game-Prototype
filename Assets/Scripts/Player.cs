@@ -13,6 +13,7 @@ public class Player : MonoBehaviour
     [SerializeField] private AudioClip _explosionSoundClip;
 
     [SerializeField] private int _lives = 3;
+    [SerializeField] private int _maxLives = 3;
     [SerializeField] private float _speed = 5f; // in meters per second
     [SerializeField] private float _speedMultiplier = 2f;
     [SerializeField] private float _fireRate = 0.25f;
@@ -37,30 +38,22 @@ public class Player : MonoBehaviour
 
     void Start()
     {
-        _score = 0;
         _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
-        if (_uiManager == null)
-        {
-            Debug.LogError("The UIManager is null");
-        }
+        if (_uiManager == null) Debug.LogError("The UIManager is null");
         
         _audioSource = GetComponent<AudioSource>();
-        if (_audioSource == null)
-        {
-            Debug.LogError("The AudioSource is null");
-        }
+        if (_audioSource == null) Debug.LogError("The AudioSource is null");
+
+        _spawnManager = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
+        if (_spawnManager == null) Debug.LogError("The SpawnManager is null");
         
-        UpdateScore(0);
-        transform.position = Vector3.zero;
-        
-        _lives = 3;
+        _score = 0;
+        _lives = _maxLives;
+        UpdateScore(_score);
         _uiManager.UpdateLives(_lives);
         
-        _spawnManager = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
-        if (_spawnManager == null)
-        {
-            Debug.LogError("The SpawnManager is null");
-        }
+        transform.position = Vector3.zero;
+        
     }
 
     void Update()
