@@ -63,6 +63,15 @@ public class Player : MonoBehaviour
         {
             FireProjectile();
         }
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            _speed *= _speedMultiplier;
+        }
+
+        if (Input.GetKeyUp(KeyCode.LeftShift))
+        {
+            _speed /= _speedMultiplier;
+        }
     }
 
     void CalculateMovement()
