@@ -122,7 +122,6 @@ public class Player : MonoBehaviour
                 _explosionPrefabs[1].SetActive(true);
                 break;
             case 0:
-            default:
                 _spawnManager.OnPlayerDeath();
                 _audioSource.clip = _explosionSoundClip;
                 _audioSource.Play();
