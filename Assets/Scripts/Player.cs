@@ -23,6 +23,8 @@ public class Player : MonoBehaviour
     [SerializeField] private float _tripleShotPowerDown = 5f;
     [SerializeField] private float _speedPowerDown = 5f;
     [SerializeField] private float _shieldPowerDown = 5f;
+    [SerializeField] private float _cameraShakeIntensity = 0.15f;
+    [SerializeField] private float _cameraShakeDuration = 0.2f;
 
     private SpawnManager _spawnManager;
 
@@ -40,6 +42,8 @@ public class Player : MonoBehaviour
     private AudioSource _audioSource;
     private UIManager _uiManager;
     private SpriteRenderer _shieldSpriteRenderer;
+    private Camera _mainCamera;
+    private Vector3 _originalCameraPosition;
 
     void Start()
     {
@@ -54,6 +58,10 @@ public class Player : MonoBehaviour
         
         _shieldSpriteRenderer = _shieldObject.GetComponent<SpriteRenderer>();
         if (_shieldSpriteRenderer == null) Debug.LogError("The Shield SpriteRenderer is null");
+        
+        _mainCamera = Camera.main;
+        if (_mainCamera == null) Debug.LogError("Main Camera is null");
+        else _originalCameraPosition = _mainCamera.transform.position;
         
         _score = 0;
         _lives = _maxLives;
@@ -136,6 +144,7 @@ public class Player : MonoBehaviour
             _shieldHits++;
             Debug.Log("Shield hits: " + _shieldHits);
             UpdateShieldOpacity();
+            StartCoroutine(CameraShake()); // Trigger camera shake on shield hit
             
             if (_shieldHits >= _maxShieldHits)
             {
@@ -149,6 +158,7 @@ public class Player : MonoBehaviour
         _lives--;
         Debug.Log("Lives: " + _lives);
         _uiManager.UpdateLives(_lives);
+        StartCoroutine(CameraShake()); // Trigger camera shake on damage
         switch (_lives)
         {
             case 2:
@@ -185,6 +195,25 @@ public class Player : MonoBehaviour
             }
             _shieldSpriteRenderer.color = shieldColor;
         }
+    }
+
+    private IEnumerator CameraShake()
+    {
+        float elapsed = 0f;
+        
+        while (elapsed < _cameraShakeDuration)
+        {
+            float x = Random.Range(-1f, 1f) * _cameraShakeIntensity;
+            float y = Random.Range(-1f, 1f) * _cameraShakeIntensity;
+            
+            _mainCamera.transform.position = new Vector3(_originalCameraPosition.x + x, _originalCameraPosition.y + y, _originalCameraPosition.z);
+            
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+        
+        // Reset camera to original position
+        _mainCamera.transform.position = _originalCameraPosition;
     }
 
     public void TripleShotActive()

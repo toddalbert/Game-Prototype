@@ -1707,6 +1707,8 @@ MonoBehaviour:
   _tripleShotPowerDown: 5
   _speedPowerDown: 5
   _shieldPowerDown: 5
+  _cameraShakeIntensity: 0.15
+  _cameraShakeDuration: 0.2
 --- !u!212 &1462414577
 SpriteRenderer:
   m_ObjectHideFlags: 0
