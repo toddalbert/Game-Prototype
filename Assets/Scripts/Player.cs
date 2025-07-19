@@ -14,6 +14,8 @@ public class Player : MonoBehaviour
 
     [SerializeField] private int _lives = 3;
     [SerializeField] private int _maxLives = 3;
+    [SerializeField] private int _laserShots = 15;
+    [SerializeField] private int _maxLaserShots = 15;
     [SerializeField] private float _speed = 5f; // in meters per second
     [SerializeField] private float _speedMultiplier = 2f;
     [SerializeField] private float _fireRate = 0.25f;
@@ -49,8 +51,10 @@ public class Player : MonoBehaviour
         
         _score = 0;
         _lives = _maxLives;
+        _laserShots = _maxLaserShots;
         UpdateScore(_score);
         _uiManager.UpdateLives(_lives);
+        _uiManager.UpdateLaserShots(_laserShots);
         
         transform.position = Vector3.zero;
         
@@ -59,7 +63,7 @@ public class Player : MonoBehaviour
     void Update()
     {
         CalculateMovement();
-        if (Input.GetKeyDown(KeyCode.Space) && Time.time > _nextFireTime)
+        if (Input.GetKeyDown(KeyCode.Space) && Time.time > _nextFireTime && _laserShots > 0)
         {
             FireProjectile();
         }
@@ -102,6 +106,9 @@ public class Player : MonoBehaviour
     void FireProjectile()
     {
         _nextFireTime = Time.time + _fireRate;
+        _laserShots--;
+        _uiManager.UpdateLaserShots(_laserShots);
+        
         if (_isTripleShotActive){
             Instantiate(_tripleShotPrefab, transform.position, _projectilePrefab.transform.rotation);
         } else {

@@ -8,6 +8,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TMP_Text _scoreText;
     [SerializeField] private TMP_Text _gameOverText;
     [SerializeField] private TMP_Text _restartText;
+    [SerializeField] private TMP_Text _laserShotsText;
     [SerializeField] private Image _livesImage;
     [SerializeField] private Sprite[] _livesSprites;
 
@@ -26,6 +27,10 @@ public class UIManager : MonoBehaviour
 
     public void UpdateScoreText(int playerScore) {
         _scoreText.text = "Score: " + playerScore;
+    }
+
+    public void UpdateLaserShots(int laserShots) {
+        _laserShotsText.text = "Shots: " + laserShots;
     }
 
     public void UpdateLives(int lives) {
