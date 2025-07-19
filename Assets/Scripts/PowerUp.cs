@@ -6,7 +6,7 @@ public class PowerUp : MonoBehaviour
     [SerializeField] private float _speed = 3f;
     // ID for powerups
     [SerializeField] private int powerupId = 0;
-    // 0 = triple shot, 1 = speed, 2 = shield, 3 = ammo
+    // 0 = triple shot, 1 = speed, 2 = shield, 3 = ammo, 4 = health
 
     void Update()
     {
@@ -37,6 +37,9 @@ public class PowerUp : MonoBehaviour
                         break;
                     case 3:
                         player.AmmoRecharge();
+                        break;
+                    case 4:
+                        player.HealthCollected();
                         break;
                     default:
                         Debug.LogError("Invalid powerup ID");

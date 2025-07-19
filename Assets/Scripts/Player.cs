@@ -180,6 +180,29 @@ public class Player : MonoBehaviour
         // StartCoroutine(AmmoRechargePowerDown());
     }
 
+    public void HealthCollected()
+    {
+        if (_lives < _maxLives)
+        {
+            _lives++;
+            _uiManager.UpdateLives(_lives);
+            
+            // Reverse visual damage effects based on current lives
+            switch (_lives)
+            {
+                case 3:
+                    _explosionPrefabs[1].SetActive(false);
+                    break;
+                case 2:
+                    _explosionPrefabs[0].SetActive(false);
+                    break;
+            }
+            
+            _audioSource.clip = _powerUpSoundClip;
+            _audioSource.Play();
+        }
+    }
+
     IEnumerator SpeedPowerDown()
     {
         yield return new WaitForSeconds(_speedPowerDown);
