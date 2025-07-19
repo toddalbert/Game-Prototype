@@ -25,6 +25,10 @@ public class Player : MonoBehaviour
     [SerializeField] private float _shieldPowerDown = 5f;
     [SerializeField] private float _cameraShakeIntensity = 0.15f;
     [SerializeField] private float _cameraShakeDuration = 0.2f;
+    [SerializeField] private float _thrusterCharge = 100f;
+    [SerializeField] private float _maxThrusterCharge = 100f;
+    [SerializeField] private float _thrusterDepletionRate = 30f; // per second when moving
+    [SerializeField] private float _thrusterRechargeRate = 50f; // per second when not moving
 
     private SpawnManager _spawnManager;
 
@@ -66,9 +70,11 @@ public class Player : MonoBehaviour
         _score = 0;
         _lives = _maxLives;
         _laserShots = _maxLaserShots;
+        _thrusterCharge = _maxThrusterCharge;
         UpdateScore(_score);
         _uiManager.UpdateLives(_lives);
         _uiManager.UpdateLaserShots(_laserShots);
+        _uiManager.UpdateThrusterCharge(_thrusterCharge / _maxThrusterCharge);
         
         transform.position = Vector3.zero;
         
@@ -99,7 +105,25 @@ public class Player : MonoBehaviour
 
         _direction = new Vector3(_horizontalInput, _verticalInput, 0);
 
-        transform.Translate(_direction * (Time.deltaTime * _speed));
+        // Check if player is moving
+        bool isMoving = _direction.magnitude > 0.1f;
+        
+        if (isMoving && _thrusterCharge > 0)
+        {
+            // Deplete thruster charge when moving
+            _thrusterCharge -= _thrusterDepletionRate * Time.deltaTime;
+            _thrusterCharge = Mathf.Max(0, _thrusterCharge);
+            transform.Translate(_direction * (Time.deltaTime * _speed));
+        }
+        else if (!isMoving && _thrusterCharge < _maxThrusterCharge)
+        {
+            // Recharge thrusters when not moving
+            _thrusterCharge += _thrusterRechargeRate * Time.deltaTime;
+            _thrusterCharge = Mathf.Min(_maxThrusterCharge, _thrusterCharge);
+        }
+        
+        // Update UI
+        _uiManager.UpdateThrusterCharge(_thrusterCharge / _maxThrusterCharge);
         
         _newPosition = transform.position;
         _newPosition.y = Mathf.Clamp(transform.position.y, -4f, 0f);
