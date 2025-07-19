@@ -171,6 +171,15 @@ public class Player : MonoBehaviour
         StartCoroutine(ShieldPowerDown());
     }
 
+    public void AmmoRecharge()
+    {
+        _laserShots = _maxLaserShots;
+        _uiManager.UpdateLaserShots(_laserShots);
+        _audioSource.clip = _powerUpSoundClip;
+        _audioSource.Play();
+        // StartCoroutine(AmmoRechargePowerDown());
+    }
+
     IEnumerator SpeedPowerDown()
     {
         yield return new WaitForSeconds(_speedPowerDown);
