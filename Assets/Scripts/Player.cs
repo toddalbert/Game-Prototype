@@ -33,10 +33,13 @@ public class Player : MonoBehaviour
 
     private bool _isTripleShotActive = false;
     private bool _isShieldActive = false;
+    private int _shieldHits = 0;
+    private int _maxShieldHits = 3;
     private int _score = 0;
 
     private AudioSource _audioSource;
     private UIManager _uiManager;
+    private SpriteRenderer _shieldSpriteRenderer;
 
     void Start()
     {
@@ -48,6 +51,9 @@ public class Player : MonoBehaviour
 
         _spawnManager = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
         if (_spawnManager == null) Debug.LogError("The SpawnManager is null");
+        
+        _shieldSpriteRenderer = _shieldObject.GetComponent<SpriteRenderer>();
+        if (_shieldSpriteRenderer == null) Debug.LogError("The Shield SpriteRenderer is null");
         
         _score = 0;
         _lives = _maxLives;
@@ -125,7 +131,21 @@ public class Player : MonoBehaviour
 
     public void TakeDamage()
     {
-        if (_isShieldActive) return;
+        if (_isShieldActive) 
+        {
+            _shieldHits++;
+            Debug.Log("Shield hits: " + _shieldHits);
+            UpdateShieldOpacity();
+            
+            if (_shieldHits >= _maxShieldHits)
+            {
+                _isShieldActive = false;
+                _shieldObject.SetActive(false);
+                _shieldHits = 0;
+            }
+            return;
+        }
+        
         _lives--;
         Debug.Log("Lives: " + _lives);
         _uiManager.UpdateLives(_lives);
@@ -143,6 +163,27 @@ public class Player : MonoBehaviour
                 _audioSource.Play();
                 Destroy(this.gameObject, 3.0f);
                 break;
+        }
+    }
+
+    private void UpdateShieldOpacity()
+    {
+        if (_shieldSpriteRenderer != null)
+        {
+            Color shieldColor = _shieldSpriteRenderer.color;
+            switch (_shieldHits)
+            {
+                case 0:
+                    shieldColor.a = 1.0f; // 100% opacity
+                    break;
+                case 1:
+                    shieldColor.a = 0.6f; // 60% opacity
+                    break;
+                case 2:
+                    shieldColor.a = 0.3f; // 30% opacity
+                    break;
+            }
+            _shieldSpriteRenderer.color = shieldColor;
         }
     }
 
@@ -165,7 +206,9 @@ public class Player : MonoBehaviour
     public void ShieldActive()
     {
         _isShieldActive = true;
+        _shieldHits = 0;
         _shieldObject.SetActive(true);
+        UpdateShieldOpacity(); // Reset opacity to 100%
         _audioSource.clip = _powerUpSoundClip;
         _audioSource.Play();
         StartCoroutine(ShieldPowerDown());
